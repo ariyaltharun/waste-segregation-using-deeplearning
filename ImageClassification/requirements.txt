@@ -1,0 +1,7 @@
+matplotlib==3.8.4
+opencv-python==4.9.0.80
+requests==2.31.0
+scikit-image==0.23.2
+timm==0.9.16
+torch==2.3.0
+torchvision==0.18.0
