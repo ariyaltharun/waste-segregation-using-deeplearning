@@ -2,8 +2,9 @@ import base64
 import json
 import os
 from typing import Dict, List
+import time
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import torch
 
@@ -91,6 +92,19 @@ def download_imgs(): #imgs: List[Dict[str, str]]):
             file.write(base64.b64decode(img['file'][22:]))
     return {'status': 'success'}
 
+
+@app.get("/get-inference-time-and-no-images")
+def get_params():
+    total_images = len(os.listdir("Images/"))
+    sample_img = torch.randn(1, 3, 200, 150).to(device)
+    start = time.time()
+    model(sample_img)
+    end = time.time()
+    return jsonify({
+        "inference_time_per_image": end-start,
+        "total_images": total_images
+    })
+    
 
 # Helper functions
 def _download_imgs(imgs: List[Dict[str, str]], dir: str="Images") -> None:
