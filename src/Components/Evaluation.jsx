@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import Features from "./Features";
+import { Navigate, redirect } from "react-router-dom";
 
 
 /* Shamelessly copied from stackoverflow, src: https://stackoverflow.com/questions/18650168/convert-blob-to-base64 */
@@ -11,6 +12,20 @@ function blobToBase64(blob) {
     });
 }
 
+
+/* Testing */
+/* Shamelessly copied from stackoverflow, src: https://stackoverflow.com/questions/12597364/how-to-save-a-javascript-object-to-file */
+// function downloadObject(obj, filename) {
+//     var blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json;charset=utf-8" }).slice(2, -1);
+//     var url = URL.createObjectURL(blob);
+//     var elem = document.createElement("a");
+//     elem.href = url;
+//     elem.download = filename;
+//     document.body.appendChild(elem);
+//     elem.click();
+//     document.body.removeChild(elem);
+// }
+/* ============ */
 
 const Evaluation = () => {
     const fileInputField = useRef(null);
@@ -26,7 +41,7 @@ const Evaluation = () => {
             body: JSON.stringify({ "imgs": JSON.stringify(files) })
         })
         let data = await response.json()
-        console.log(data);
+        console.log(data);  // Returns {'status': 'success|failure'}
     }
 
     // Shamelessly copied from Copilot
@@ -50,6 +65,13 @@ const Evaluation = () => {
         console.log(files);
         // ------------------------------------------------------------------------------------
     }
+
+    // const handleClick = (event) => {
+    //     event.preventDefault()
+    //     console.log("Hello Ariyal");
+    //     downloadObject(files, "jjjson.json")
+    //     redirect("/EvaluationResult")
+    // }
 
     return <section className="dark:bg-gray-900">
         <form action="" onSubmit={handleSubmit}>
@@ -79,7 +101,7 @@ const Evaluation = () => {
 
 
             <div className="flex flex-col items-center justify-center">
-                <button className="inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <button onClick={handleClick} className="inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
                     <span className="px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                         Start Model Evaluate
                     </span>
