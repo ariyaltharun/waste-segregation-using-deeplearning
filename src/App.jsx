@@ -3,16 +3,16 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-import Navbar from './Components/Navbar'
-import Home from './Components/Home'
-import About from './Components/About'
-import Footer from './Components/Footer'
+import Navbar from './components/Navbar'
+import Home from './pages/Home'
+import About from './pages/About'
+import Footer from './components/Footer'
 
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Evaluation from './Components/Evaluation'
-import Features from './Components/Features'
-import EvaluationResult from './Components/EvaluationResult'
+import UploadImages from './pages/UploadImages'
+import Features from './components/Features'
+import EvaluateModel from './pages/EvaluateModel'
 
 
 const router = createBrowserRouter([
@@ -35,30 +35,21 @@ const router = createBrowserRouter([
       <Footer />
     </>
   },
-  // {
-  //   path: "/UploadImageFolder",
-  //   element: 
-  //   <>
-  //     <Navbar />
-  //     <UploadImagesFolder />
-  //     <Footer />
-  //   </>
-  // },
   {
-    path: "/Evaluation",
+    path: "/UploadImages",
     element: 
     <>
       <Navbar />
-      <Evaluation />
+      <UploadImages />
       <Footer />
     </>
   },
   {
-    path: "/EvaluationResult",
+    path: "/EvaluateModel",
     element:
     <>
       <Navbar />
-      <EvaluationResult />
+      <EvaluateModel />
       <Footer />
     </>
   }
