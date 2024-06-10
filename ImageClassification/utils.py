@@ -1,3 +1,6 @@
+import base64
+import os
+
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -30,4 +33,13 @@ def read_img(path, device):
 
     img = transform(img)
     return img
- 
+
+
+def convert_img_to_base64(path: str="Images/") -> list[str]:
+    b64_encoded_imgs = []
+    for img in os.listdir(path):
+        with open(f"{path}/{img}", 'rb') as img_file:
+            encode_img_to_b64 = base64.b64encode(img_file.read())
+            b64_encoded_imgs.append(encode_img_b64.decode('UTF-8'))
+    return B64_encoded_imgs
+
