@@ -1,14 +1,9 @@
-import sample_images from "./ariyal"
-
-
 const Metrics = (props) => {
     return <>
-
-
         <div className="grid grid-cols-2 max-w-screen-xl w-full p-4 h-[45rem]">
             <div className="grid grid-cols-5 bg-gray-800 p-2 gap-2 overflow-auto w-[48rem]"> {/*sm:justify-self-center sm:m-4">*/}
-                {sample_images.map((image, idx) => (
-                    <img key={idx} src={image['file']} alt={""} className="w-36 h-36" />
+                {props.images && props.images.map((image, idx) => (
+                    <img key={idx} src={"data:image/png;base64,"+image} alt={""} className="w-36 h-36" />
                 ))}
             </div>
 
@@ -31,7 +26,6 @@ const Metrics = (props) => {
                     }
                 </ul>
             </div>
-            {/* </div> */}
         </div>
     </>
 }

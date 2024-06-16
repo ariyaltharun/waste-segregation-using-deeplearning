@@ -93,8 +93,10 @@ const UploadImages = () => {
                 </label>
             </div>
 
-            {/* Display Images */}
-            <label htmlFor="">Display Images</label>
+            <div className="w-full max-w-screen-xl mx-auto mt-9">
+                <label htmlFor="" className="dark:text-cyan-500 mx-4 text-2xl">Display Images</label>
+            </div>
+
             <div className="w-full max-w-screen-xl mx-auto px-auto md:py-8 flex flex-wrap">
                 {files && files.map((file, idx) => (
                     <div key={idx}>
