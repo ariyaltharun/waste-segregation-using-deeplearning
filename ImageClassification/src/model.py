@@ -25,12 +25,11 @@ def InceptionResnetV2(mode="train"):
     )
 
     model.classif = nn.Sequential(
-        nn.Linear(in_features=1536, out_features=700),
+        nn.Linear(in_features=1536, out_features=768),
         nn.ReLU(),
-        nn.Linear(in_features=700, out_features=100),
+        nn.Linear(in_features=768, out_features=100),
         nn.ReLU(),
         nn.Linear(in_features=100, out_features=2),
-        nn.ReLU(),
     )
 
     for name, param in model.named_parameters():
@@ -42,7 +41,7 @@ def InceptionResnetV2(mode="train"):
     return model
 
 
-def get_inference_model(ckpt_path):
+def get_inference_model(model, ckpt_path, device):
     """
     Get Inception-Resent-V2 model for inference
 
@@ -56,7 +55,7 @@ def get_inference_model(ckpt_path):
     """
     checkpoint = torch.load(ckpt_path)
     model = InceptionResnetV2(mode="inference")
-    model.load_state_dict(checkpoint["model_state_dict"])
+    model.load_state_dict(checkpoint["model_state_dict"], map_location=device)
     return model
 
 
