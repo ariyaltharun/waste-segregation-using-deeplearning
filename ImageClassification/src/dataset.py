@@ -39,10 +39,10 @@ class WasteClassificationDataset(Dataset):
         self.data: list[str] = list()
         for dirpath, dirname, filenames in os.walk(self.root):
             if train and dirpath == self.root + "/Train":
-                filenames = list(map(lambda x: dirpath + x, filenames))
+                filenames = list(map(lambda x: f"{dirpath}/{x}", filenames))
                 self.data.extend(filenames)
             if not train and dirpath == self.root + "/Test":
-                filenames = list(map(lambda x: dirpath + x, filenames))
+                filenames = list(map(lambda x: f"{dirpath}/{x}", filenames))
                 self.data.extend(filenames)
         random.shuffle(self.data)
 
