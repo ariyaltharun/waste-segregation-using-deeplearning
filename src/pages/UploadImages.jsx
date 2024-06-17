@@ -3,7 +3,7 @@ import Features from "../components/Features";
 import { useNavigate } from "react-router-dom";
 
 
-const base_url = "https://73d5-34-150-205-221.ngrok-free.app"
+const base_url = "https://3cf5-104-198-139-211.ngrok-free.app"
 
 
 /* Shamelessly copied from stackoverflow, src: https://stackoverflow.com/questions/18650168/convert-blob-to-base64 */
@@ -25,7 +25,7 @@ function blobToBase64(blob) {
 //     elem.href = url;
 //     elem.download = filename;
 //     document.body.appendChild(elem);
-//     elem.click();
+//     elem.click();https://6e1e-34-148-108-102.ngrok-free.app
 //     document.body.removeChild(elem);
 // }
 /* ============ */
@@ -39,7 +39,7 @@ const UploadImages = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const response = await fetch(`${base_url}/post-imgs`, {
+        const response = await fetch(`${base_url}/upload-imgs`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

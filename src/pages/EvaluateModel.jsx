@@ -3,7 +3,7 @@ import Features from "../components/Features"
 import Metrics from "../components/Metrics"
 
 // const base_url = "http://localhost:5000"
-const base_url = "https://8328-34-150-205-221.ngrok-free.app"
+const base_url = "https://3cf5-104-198-139-211.ngrok-free.app"
 
 
 const EvaluateModel = () => {
