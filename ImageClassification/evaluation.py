@@ -14,7 +14,7 @@ from tqdm.auto import tqdm
 from src.model import InceptionResnetV2, get_inference_model
 
 
-def evaluate_model(model, loader, criterion):
+def evaluate_model(model, loader, criterion, device):
     model.eval()
     num_correct = 0
     num_samples = 0
@@ -38,11 +38,11 @@ def evaluate_model(model, loader, criterion):
         predictions
     
     eval_results = {
-        "Accuracy": float(num_correct)/float(num_samples)*100,
-        "Loss": test_loss/len(loader),
-        "Precision": precision_score(predictions, targets),
-        "Recall": recall_score(predictions, targets),
-        "F1Score": f1_score(predictions, targets),
+        "Accuracy": round(float(num_correct)/float(num_samples)*100, 2),
+        "Loss": round(test_loss/len(loader), 2),
+        "Precision": round(precision_score(predictions, targets), 2),
+        "Recall": round(recall_score(predictions, targets), 2),
+        "F1Score": round(f1_score(predictions, targets), 2),
     }
     return eval_results
 
