@@ -3,84 +3,47 @@ import time
 
 import torch
 import torch.nn as nn
-from torchmetrics.classification import (
-    Accuracy,
-    ConfusionMatrix,
-    F1Score,
-    Precision,
-    Recall,
-    ROC,
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score
 )
 from tqdm.auto import tqdm
 
-from src.model import InceptionResnetV2
+from src.model import InceptionResnetV2, get_inference_model
 
 
-def evaluate_model(dataloader):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Load the model
-    model = InceptionResnetV2(mode="eval")
-
-    # Load criterion
-    criterion = nn.CrossEntropyLoss()
-
-    # load the checkpoints
-    checkpoint_path = "Checkpoint/waste_clf_trained_model.pth"
-    checkpoints = torch.load(checkpoint_path)
-
-    # Load the trained param to model
-    model.load_state_dict(checkpoints["model_state_dict"])
-    
-    file = open("model_eval.log", "a")
-    progress_bar = tqdm(total=len(dataloader))
-
+def evaluate_model(model, loader, criterion):
     model.eval()
-    running_loss = 0.0
-    targets = []
-    preds = []
+    num_correct = 0
+    num_samples = 0
+    predictions = list()
+    targets = list()
+    test_loss = 0
     with torch.no_grad():
-        for batch_idx, (imgs, labels) in enumerate(dataloader):
+        for imgs, labels in tqdm(loader):
             imgs = imgs.to(device)
             labels = labels.to(device)
 
-            y_pred = model(imgs)
-            y_pred.to(device)
+            preds = model(imgs)
+            test_loss += criterion(preds, labels).item()
 
-            preds.append(y_pred.argmax().item())
-            targets.append(labels[0].item())
+            num_correct += (preds.argmax(dim=1) == labels).sum()
+            num_samples += labels.shape[0]
 
-            loss = criterion(y_pred, labels)
-            running_loss += loss.item()
-
-            if batch_idx % 50 == 0:
-                val_acc=accuracy_score(targets, preds)
-                val_loss=running_loss
-                val_precision=precision_score(targets, preds)
-                val_recall=recall_score(targets, preds)
-                val_f1score=f1_score(targets, preds)
-
-                file.write(f"{round(time.time(),3)},{round(float(val_acc),2)},{round(float(val_loss),4)},{round(float(val_precision),2)},{round(float(val_recall),4)},{round(float(val_f1score),4)}\n")
-
-                progress_bar.set_postfix(
-                    val_acc=accuracy_score(targets, preds),
-                    val_loss=running_loss,
-                    val_precision=precision_score(targets, preds),
-                    val_recall=recall_score(targets, preds),
-                    val_f1score=f1_score(targets, preds)
-                )
-
-            progress_bar.update()
-
+            predictions.extend(preds.argmax(dim=1).cpu().numpy().reshape(1, -1).tolist()[0])
+            targets.extend(labels.cpu().numpy().reshape(1, -1).tolist()[0])
+        print(f"Test: Got {num_correct}/{num_samples}, Test Accuracy: {num_correct/num_samples*100:.2f}, Test Loss: {test_loss/len(loader):.2f}")
+        predictions
+    
     eval_results = {
-        "Val Accuracy": accuracy_score(targets, preds),
-        "Val loss": running_loss,
-        "Val Precision": precision_score(targets, preds),
-        "Val Recall": recall_score(targets, preds),
-        "Val F1score": f1_score(targets, preds),
+        "Accuracy": float(num_correct)/float(num_samples)*100,
+        "Loss": test_loss/len(loader),
+        "Precision": precision_score(predictions, targets),
+        "Recall": recall_score(predictions, targets),
+        "F1Score": f1_score(predictions, targets),
     }
-    progress_bar.close()
-    file.close()
     return eval_results
 
 
@@ -92,7 +55,7 @@ if __name__ == "__main_":
     eval_dataloader = get_dataloader()
     # Create CustomDataset Instance
     eval_dataset = get_dataset(
-        root="Images/",
+        root="Images",
         train=False,
         transform=transform
     )
@@ -103,8 +66,12 @@ if __name__ == "__main_":
         batch_size=1,
         shuffle=True
     )
-
+    
+    ckpt_path = ""
+    model = get_inference_model(ckpt_path)
+    
+    criterion = nn.CrossEntropyLoss()
     print("============== [ TEST ] EVAL RESULTS ===================")
-    print(evaluate_model(model, eval_dataloader))
+    print(evaluate_model(model, eval_dataloader, criterion))
     print("========================================================")
-
+    
