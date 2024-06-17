@@ -25,3 +25,6 @@ dist-ssr
 
 # Python environments
 env/
+
+# Custom files
+Experiments/
