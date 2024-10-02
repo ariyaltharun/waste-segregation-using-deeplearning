@@ -5,6 +5,5 @@ scikit-image==0.23.2
 timm==0.9.16
 torch==2.3.0
 torchvision==0.18.0
-Flask-Cors==4.0.1
+Flask-Cors>=4.0.2
 torchmetrics==1.4.0.post0
-
